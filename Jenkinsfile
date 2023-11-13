@@ -17,14 +17,29 @@ pipeline {
             }
         }
     }
+    // post {
+    //     always {
+    //         junit testResults: '**/target/surefire-reports/TEST-*.xml'
+    //         recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
+    //         recordIssues enabledForFailure: true, tools: checkStyle()
+    //         recordIssues enabledForFailure: true, tools: spotBugs(pattern: '**/target/findbugsXml.xml')
+    //         recordIssues enabledForFailure: true, tools: cpd(pattern: '**/target/cpd.xml')
+    //         recordIssues enabledForFailure: true, tools: pmdParser(pattern: '**/target/pmd.xml')
+    //     }
+    // }
     post {
-        always {
-            junit testResults: '**/target/surefire-reports/TEST-*.xml'
-            recordIssues enabledForFailure: true, tools: [mavenConsole(), java(), javaDoc()]
-            recordIssues enabledForFailure: true, tools: checkStyle()
-            recordIssues enabledForFailure: true, tools: spotBugs(pattern: '**/target/findbugsXml.xml')
-            recordIssues enabledForFailure: true, tools: cpd(pattern: '**/target/cpd.xml')
-            recordIssues enabledForFailure: true, tools: pmdParser(pattern: '**/target/pmd.xml')
-        }
+    always {
+        junit testResults: '**/target/surefire-reports/TEST-*.xml'
+        recordIssues enabledForFailure: true, tools: [
+            mavenConsole(), 
+            java(pattern: '**/target/*.java'), 
+            javaDoc(pattern: '**/target/*.java'), 
+            checkStyle(pattern: '**/target/checkstyle-result.xml'), 
+            spotBugs(pattern: '**/target/findbugsXml.xml'), 
+            cpd(pattern: '**/target/cpd.xml'), 
+            pmdParser(pattern: '**/target/pmd.xml')
+        ]
     }
+}
+
 }
